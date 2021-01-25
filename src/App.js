@@ -1,23 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Cat } from "react-kawaii";
+import { useDispatch, useSelector } from "react-redux";
+import { updateCatMood, MOODS } from "./mood";
 
 function App() {
+  const dispatch = useDispatch();
+  const currentMood = useSelector((state) => state.mood);
+
+  const handleMoodUpdate = (evt) => {
+    const mood = evt.target.dataset.type;
+    dispatch(updateCatMood(mood));
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Cat size={320} mood={currentMood} color="#596881" />
+      <section>
+        {Object.values(MOODS).map((mood) => (
+          <button
+            data-type={mood}
+            key={mood}
+            className={`${currentMood === mood ? "selected" : ""}`}
+            onClick={handleMoodUpdate}
+          >
+            {mood}
+          </button>
+        ))}
+      </section>
     </div>
   );
 }
